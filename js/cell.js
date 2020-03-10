@@ -1,9 +1,9 @@
 class Cell {
-    constructor(fieldElement, game, numberInRow) {
+    constructor(fieldElement, game) {
         this.game = game;
 
         this.element = createAndAppend({
-            className: 'cell cell' + numberInRow,
+            className: 'cell',
             parentElement: fieldElement
         });
         this.element.setAttribute('data-ship', '');

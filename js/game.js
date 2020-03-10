@@ -1,3 +1,5 @@
+let gameOverMessage = 'Try again!';
+
 class Game {
     constructor(parentElement, size = 4) {
         this.size = size;
@@ -5,6 +7,7 @@ class Game {
         this.gameElement = createAndAppend({className: 'game', parentElement});
         this.gameElement.id = 'game';
 
+        createAndAppend({className: 'title', parentElement: this.gameElement}).innerHTML = '2048';
         this.headerElement = createAndAppend({className: 'header', parentElement: this.gameElement});
 
         this.ratingElement = createAndAppend({
@@ -13,25 +16,24 @@ class Game {
         });
         this.rating = 0;
 
+        this.bestElement = createAndAppend({
+            className: 'best',
+            parentElement: this.headerElement
+        });
+        this.best = 0;
+
         this.restartElement = createAndAppend({
             className: 'restart',
             parentElement: this.headerElement,
             value: 'Restart'
         }, 'button');
 
-        this.restartElement.addEventListener('click', this.restart.bind(this));
+        this.restartElement.addEventListener('click', () => this.clearField());
 
         this.gameContainerElement = createAndAppend({className: 'game-container', parentElement: this.gameElement});
         this.fieldElement = createAndAppend({className: 'field', parentElement: this.gameContainerElement});
 
-        this.field = [];
-        for (let i = 0; i < size; i++) {
-            this.field[i] = [];
-            let rowElement = createAndAppend({className: 'row', parentElement: this.fieldElement});
-            for (let k = 0; k < size; k++) {
-                this.field[i][k] = new Cell(rowElement, this, k);
-            }
-        }
+        this.clearField();
 
         // arrow keys
         window.addEventListener('keyup', (e) => {
@@ -52,7 +54,7 @@ class Game {
         });
 
         // swipes
-        window.addEventListener('load', (e) => {
+        window.addEventListener('load', () => {
             let el = document.getElementById('game');
             swipedetect(el, (swipedir) => {
                 switch (swipedir) {
@@ -86,6 +88,16 @@ class Game {
     set rating(value) {
         this._rating = value;
         this.ratingElement.innerHTML = 'Rating: ' + value;
+        if (value > this.best) this.best = value;
+    }
+
+    set best(value) {
+        this._best = value;
+        this.bestElement.innerHTML = 'Best: ' + value;
+    }
+
+    get best() {
+        return this._best;
     }
 
     get rating() {
@@ -106,6 +118,9 @@ class Game {
 
         if (hasMoved) {
             this.spawnCell();
+
+            if (this.isNoMovesLeft())
+                alert(gameOverMessage);
         }
     }
 
@@ -119,6 +134,9 @@ class Game {
 
         if (hasMoved) {
             this.spawnCell();
+
+            if (this.isNoMovesLeft())
+                alert(gameOverMessage);
         }
     }
 
@@ -132,6 +150,9 @@ class Game {
 
         if (hasMoved) {
             this.spawnCell();
+
+            if (this.isNoMovesLeft())
+                alert(gameOverMessage);
         }
     }
 
@@ -145,6 +166,9 @@ class Game {
 
         if (hasMoved) {
             this.spawnCell();
+
+            if (this.isNoMovesLeft())
+                alert(gameOverMessage);
         }
     }
 
@@ -182,27 +206,51 @@ class Game {
     spawnCell() {
         let emptyCells = [];
         for (let i = 0; i < this.field.length; i++) {
-            for (let k = this.field[i].length - 1; k >= 0; k--) {
-                if (!this.field[i][k].value) emptyCells.push(this.field[i][k]);
+            for (let k = 0; k < this.field[i].length; k++) {
+                if (this.field[i][k].value === 0) {
+                    emptyCells.push(this.field[i][k]);
+                }
             }
         }
-
-        if (emptyCells.length) {
-            emptyCells[getRandomIntInclusive(0, emptyCells.length - 1)].spawn();
-        } else {
-            alert('You lost :(');
-        }
+        emptyCells[getRandomIntInclusive(0, emptyCells.length - 1)].spawn();
     }
 
-    restart() {
+    clearField() {
         this.fieldElement.innerHTML = '';
         this.field = [];
-
         for (let i = 0; i < this.size; i++) {
             this.field[i] = [];
+            let rowElement = createAndAppend({className: 'row', parentElement: this.fieldElement});
             for (let k = 0; k < this.size; k++) {
-                this.field[i][k] = new Cell(this.fieldElement, this);
+                this.field[i][k] = new Cell(rowElement, this);
             }
         }
+        this.rating = 0;
+    }
+
+    isNoMovesLeft() {
+        if (this.isNoEmptyCells()) {
+            for (let i = 0; i < this.size; i++) {
+                for (let k = 0; k < this.size - 1; k++) {
+                    if (this.field[i][k].value === this.field[i][k + 1].value
+                        || this.field[k][i].value === this.field[k + 1][i].value) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    isNoEmptyCells() {
+        for (let i = 0; i < this.size; i++) {
+            for (let k = 0; k < this.size; k++) {
+                if (this.field[i][k].value === 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
