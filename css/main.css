@@ -14,6 +14,18 @@ html, body {
     overflow: hidden;
 }
 
+.container {
+    width: 500px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 520px) {
+    .container {
+        width: 280px;
+        margin: 0 auto;
+    }
+}
+
 .game {
     position: relative;
     display: flex;
@@ -42,39 +54,113 @@ html, body {
     margin: 0 20px;
 }
 
-.game .field {
+.game-container {
+    padding: 15px;
+    background: #BBADA0;
+    height: 500px;
+    width: 500px;
+
+    margin-top: 40px;
     position: relative;
-    z-index: 1;
+
+    cursor: default;
+    -webkit-touch-callout: none;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -ms-touch-action: none;
+    touch-action: none;
+
+    border-radius: 6px;
+
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 520px) {
+    .game-container {
+        margin-top: 17px;
+        position: relative;
+        padding: 10px;
+        cursor: default;
+        -webkit-touch-callout: none;
+        -ms-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -ms-touch-action: none;
+        touch-action: none;
+        background: #bbada0;
+        border-radius: 6px;
+        width: 280px;
+        height: 280px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+}
+
+.game .field .row {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    height: 100%;
-    width: 100%;
-    flex-shrink: 1;
+    margin-bottom: 15px;
+}
+
+.game .field .row:last-child {
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .row {
+        margin-bottom: 10px;
+    }
+
+    .game .field .row:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .game .field .cell {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 1%;
     box-sizing: border-box;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 6%;
-    font-size: 10vmin;
     font-family: ClearSans, "Helvetica Neue", Arial, sans-serif;
     font-weight: bold;
-    background-image: none;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
     transition: background-color 0.2s ease-in-out, height 0.2s, width 0.2s, margin 0.2s;
+    width: 106.25px;
+    height: 106.25px;
+    border-radius: 3px;
+    background: #eee4da;
+    text-align: center;
+    z-index: 10;
+    font-size: 55px;
+    background: rgba(238, 228, 218, 0.35);
+    margin-right: 15px;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0), inset 0 0 0 1px rgba(255, 255, 255, 0);
 }
 
-.game .field .cell.hightlight {
-    margin: 0;
+.game .field .cell:last-child {
+    margin-right: 0;
 }
+
+@media screen and (max-width: 520px) {
+    .game .field .cell {
+        width: 57.5px;
+        height: 57.5px;
+        margin-right: 10px;
+        border-radius: 3px;
+        background: rgba(238, 228, 218, 0.35);
+        font-size: 35px;
+    }
+
+    .game .field .cell:last-child {
+        margin-right: 0;
+    }
+}
+
 
 @keyframes hide {
     from {
@@ -85,65 +171,113 @@ html, body {
     }
 }
 
-.game .field .cell.animate {
-    position: absolute;
-    margin: 0;
-    transition: left 0.2s, top 0.2s;
-    z-index: -1;
-    animation-name: hide;
-    animation-duration: 0.2s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-}
 
 .game .field .cell[data-ship="2"] {
-    background-color: #EEE4DA;
     color: #776E65;
+    background: #eee4da;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0), inset 0 0 0 1px rgba(255, 255, 255, 0);
 }
 
+
 .game .field .cell[data-ship="4"] {
-    background-color: #EDE0C8;
     color: #776E65;
+    background: #ede0c8;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0), inset 0 0 0 1px rgba(255, 255, 255, 0);
 }
 
 .game .field .cell[data-ship="8"] {
-    background-color: #F2B179;
-    color: #F9F6F2;
+    color: #f9f6f2;
+    background: #f2b179;
 }
 
 .game .field .cell[data-ship="16"] {
-    background-color: #F59563;
-    color: #F9F6F2;
+    color: #f9f6f2;
+    background: #f59563;
 }
 
 .game .field .cell[data-ship="32"] {
-    background-image: url(/img/units/frigate.png);
+    color: #f9f6f2;
+    background: #f67c5f;
 }
 
 .game .field .cell[data-ship="64"] {
-    background-image: url(/img/units/cruiser.png);
+    color: #f9f6f2;
+    background: #f65e3b;
 }
 
 .game .field .cell[data-ship="128"] {
-    background-image: url(/img/units/battleship.png);
+    color: #f9f6f2;
+    background: #edcf72;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.2381), inset 0 0 0 1px rgba(255, 255, 255, 0.14286);
+    font-size: 45px;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .cell[data-ship="128"] {
+        font-size: 25px;
+    }
 }
 
 .game .field .cell[data-ship="256"] {
-    background-image: url(/img/units/carrier.png);
+    color: #f9f6f2;
+    background: #edcc61;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.31746), inset 0 0 0 1px rgba(255, 255, 255, 0.19048);
+    font-size: 45px;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .cell[data-ship="256"] {
+        font-size: 25px;
+    }
 }
 
 .game .field .cell[data-ship="512"] {
-    background-image: url(/img/units/dreadnought.png);
+    color: #f9f6f2;
+    background: #edc850;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.39683), inset 0 0 0 1px rgba(255, 255, 255, 0.2381);
+    font-size: 45px;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .cell[data-ship="512"] {
+        font-size: 25px;
+    }
 }
 
 .game .field .cell[data-ship="1024"] {
-    background-image: url(/img/units/railgun.png);
+    color: #f9f6f2;
+    background: #edc53f;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.47619), inset 0 0 0 1px rgba(255, 255, 255, 0.28571);
+    font-size: 35px;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .cell[data-ship="1024"] {
+        font-size: 15px;
+    }
 }
 
 .game .field .cell[data-ship="2048"] {
-    background-image: url(/img/units/reaper.png);
+    color: #f9f6f2;
+    background: #edc22e;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.55556), inset 0 0 0 1px rgba(255, 255, 255, 0.33333);
+    font-size: 35px;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .cell[data-ship="2048"] {
+        font-size: 15px;
+    }
 }
 
 .game .field .cell[data-ship="4096"] {
-    background-image: url(/img/units/flagship.png);
+    color: #f9f6f2;
+    background: #3c3a32;
+    font-size: 30px;
+}
+
+@media screen and (max-width: 520px) {
+    .game .field .cell[data-ship="4096"] {
+        font-size: 10px;
+    }
 }

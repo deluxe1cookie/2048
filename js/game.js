@@ -1,10 +1,6 @@
 class Game {
     constructor(parentElement, size = 4) {
-        this.fieldSize = (window.innerHeight * 0.88 > window.innerWidth ? window.innerWidth : window.innerHeight * 0.88);
-
         this.size = size;
-
-        this.cellSize = ((100 / this.size) - 2);
 
         this.gameElement = createAndAppend({className: 'game', parentElement});
         this.gameElement.id = 'game';
@@ -25,13 +21,15 @@ class Game {
 
         this.restartElement.addEventListener('click', this.restart.bind(this));
 
-        this.fieldElement = createAndAppend({className: 'field', parentElement: this.gameElement});
+        this.gameContainerElement = createAndAppend({className: 'game-container', parentElement: this.gameElement});
+        this.fieldElement = createAndAppend({className: 'field', parentElement: this.gameContainerElement});
 
         this.field = [];
         for (let i = 0; i < size; i++) {
             this.field[i] = [];
+            let rowElement = createAndAppend({className: 'row', parentElement: this.fieldElement});
             for (let k = 0; k < size; k++) {
-                this.field[i][k] = new Cell(this.fieldElement, this);
+                this.field[i][k] = new Cell(rowElement, this, k);
             }
         }
 

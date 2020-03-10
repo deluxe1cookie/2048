@@ -13,4 +13,4 @@ let getRandomIntInclusive = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-new Game(document.body, 4);
+new Game(document.getElementById('container'), 4);

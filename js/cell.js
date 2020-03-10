@@ -1,27 +1,17 @@
-let setCellSize = function (cellElement, size) {
-    cellElement.style.width = size + '%';
-    cellElement.style.height = size + '%';
-};
-
 class Cell {
-    constructor(fieldElement, game) {
+    constructor(fieldElement, game, numberInRow) {
         this.game = game;
 
-        this.fieldElement = fieldElement;
-
         this.element = createAndAppend({
-            className: 'cell',
+            className: 'cell cell' + numberInRow,
             parentElement: fieldElement
         });
         this.element.setAttribute('data-ship', '');
-
-        setCellSize(this.element, this.game.cellSize);
 
         if (Math.random() > 0.8) {
             this.spawn();
         }
     }
-
 
     get value() {
         return this._value || 0;
@@ -37,33 +27,10 @@ class Cell {
         this.value = 0;
     }
 
-    hightlight() {
-        this.element.className = 'cell hightlight';
-
-        setCellSize(this.element, this.game.cellSize + 2);
-
-        let hightlightTime = 200;
-        let hightlightStartTime = new Date();
-        this.hightlightStartTime = hightlightStartTime;
-
-        setTimeout(() => {
-            if (hightlightStartTime === this.hightlightStartTime) {
-                this.element.className = 'cell';
-                setCellSize(this.element, this.game.cellSize);
-            }
-        }, hightlightTime);
-    }
-
     merge(cell) {
-        if (this.value) {
-            this.game.addRating(this.value + cell.value);
-        }
-
-        new AnimateCell(cell, this);
+        if (this.value) this.game.addRating(this.value + cell.value);
 
         this.value += cell.value;
-
-        this.hightlight();
 
         cell.clear();
     }
@@ -78,26 +45,5 @@ class Cell {
 
     get isEmpty() {
         return this.value === 0;
-    }
-}
-
-class AnimateCell {
-    constructor(fromCell, toCell) {
-        this.element = createAndAppend({className: 'cell animate'});
-        this.element.setAttribute('data-ship', fromCell.element.getAttribute('data-ship'));
-
-        setCellSize(this.element, fromCell.game.cellSize);
-
-        this.element.style.top = fromCell.element.offsetTop + 'px';
-        this.element.style.left = fromCell.element.offsetLeft + 'px';
-
-        fromCell.fieldElement.appendChild(this.element);
-
-        this.element.style.top = toCell.element.offsetTop + 'px';
-        this.element.style.left = toCell.element.offsetLeft + 'px';
-
-        setTimeout(function () {
-            fromCell.fieldElement.removeChild(this.element);
-        }.bind(this), 200);
     }
 }
