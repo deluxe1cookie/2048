@@ -29,6 +29,7 @@ class Game {
         }, 'button');
 
         this.restartElement.addEventListener('click', () => this.clearField());
+        this.restartElement.addEventListener('touchstart', () => this.clearField());
 
         this.gameContainerElement = createAndAppend({className: 'game-container', parentElement: this.gameElement});
         this.fieldElement = createAndAppend({className: 'field', parentElement: this.gameContainerElement});
